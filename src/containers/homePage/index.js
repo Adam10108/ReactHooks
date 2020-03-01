@@ -59,6 +59,7 @@ const HomePage = () => {
       lastName: R.path(['lastName'], person)
     }
     setPeople([...people, newPerson])
+    setPerson({ firstName: '', lastName: '' })
   }
 
   return (
