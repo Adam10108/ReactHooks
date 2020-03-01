@@ -1,8 +1,10 @@
 // @flow
 import { Row, Col } from 'antd'
+import * as R from 'ramda'
 import React, { useState } from 'react'
 import styled from '@emotion/styled'
-import { FormAddPerson } from './components'
+
+import { FormAddPerson, ListPeople } from './components'
 
 const StyledContent = styled.div`
   height: 100vh;
@@ -38,10 +40,25 @@ const HomePage = () => {
     { firstName: 'Rocky', lastName: 'Babo' }
   ])
 
-  const [person, setPerson] = useState({})
+  const [person, setPerson] = useState({ firstName: '', lastName: '' })
 
-  const onSubmit = event => {
-    console.log({ event })
+  const onChange = e => {
+    setPerson({ ...person, [e.target.name]: e.target.value })
+  }
+
+  const onSubmit = async e => {
+    e.preventDefault()
+    if (
+      R.isEmpty(R.path(['firstName'], person)) ||
+      R.isEmpty(R.path(['lastName'], person))
+    )
+      return
+
+    const newPerson = {
+      firstName: R.path(['firstName'], person),
+      lastName: R.path(['lastName'], person)
+    }
+    setPeople([...people, newPerson])
   }
 
   return (
@@ -51,9 +68,15 @@ const HomePage = () => {
       </StyledHeader>
       <Row>
         <Col span={12}>
-          <FormAddPerson onSubmit={onSubmit} />
+          <FormAddPerson
+            person={person}
+            onChange={onChange}
+            onSubmit={onSubmit}
+          />
         </Col>
-        <Col span={12}>dvs</Col>
+        <Col span={12}>
+          <ListPeople people={people} />
+        </Col>
       </Row>
     </StyledContent>
   )
