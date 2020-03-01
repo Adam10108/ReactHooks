@@ -3,7 +3,7 @@ import { Row, Col } from 'antd'
 import React, { useState } from 'react'
 import styled from '@emotion/styled'
 
-import { FormAddPerson, ListPeople } from './components'
+import { FormAddPerson, ListPeople, NewestPerson } from './components'
 
 const StyledContent = styled.div`
   height: 100vh;
@@ -28,9 +28,9 @@ const StyledHeader = styled.div`
 `
 
 const StyledText = styled.span`
-  font-size: 40px;
+  font-size: ${props => (props.header ? '40px' : '30px')};
   font-weight: 800;
-  color: white;
+  color: ${props => (props.header ? 'white' : 'black')};
 `
 
 const HomePage = () => {
@@ -42,11 +42,12 @@ const HomePage = () => {
   const addPerson = newPerson => {
     setPeople([...people, newPerson])
   }
+  const lastPeople = people[people.length - 1]
 
   return (
     <StyledContent>
       <StyledHeader>
-        <StyledText>Learn React Hooks (useState)</StyledText>
+        <StyledText header>Learn React Hooks (useState)</StyledText>
       </StyledHeader>
       <Row>
         <Col span={12}>
@@ -56,6 +57,8 @@ const HomePage = () => {
           <ListPeople people={people} />
         </Col>
       </Row>
+      <NewestPerson lastPeople={lastPeople} />
+      <Row />
     </StyledContent>
   )
 }
