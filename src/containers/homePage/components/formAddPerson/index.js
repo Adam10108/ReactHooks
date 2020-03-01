@@ -1,7 +1,7 @@
 // @flow
 import { Form, Input, Button } from 'antd'
 import * as R from 'ramda'
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useMemo, useRef } from 'react'
 import styled from '@emotion/styled'
 
 import { PeopleContext } from '../../../../core/hooks/context'
@@ -52,7 +52,8 @@ const StyledButton = styled(Button)`
 
 const FormAddPerson = () => {
   const peopleContext = useContext(PeopleContext)
-
+  const { people } = peopleContext
+  const firstNameInput = useRef(null)
   const [person, setPerson] = useState({ firstName: '', lastName: '' })
 
   const onChange = e => {
@@ -73,14 +74,21 @@ const FormAddPerson = () => {
     }
     peopleContext.addPerson(newPerson)
     setPerson({ firstName: '', lastName: '' })
+    firstNameInput.current.focus()
   }
-
+  const printNumberOfPeople = () => {
+    // eslint-disable-next-line no-console
+    console.log(`Number of people : ${people.length}`)
+  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useMemo(() => printNumberOfPeople(), [people])
   return (
     <StyledContent>
       <Form>
         <StyledInputBox>
           <StyledLabel>First Name</StyledLabel>
           <StyledInput
+            ref={firstNameInput}
             name="firstName"
             value={R.path(['firstName'], person)}
             onChange={e => onChange(e)}

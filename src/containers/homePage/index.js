@@ -63,7 +63,9 @@ const HomePage = () => {
       <StyledContent>
         <StyledHeader>
           <StyledText>Learn React Hooks</StyledText>
-          <StyledText>(useState , useEffect)</StyledText>
+          <StyledText>
+            (useState , useEffect , useContext , useReducer , useRef)
+          </StyledText>
         </StyledHeader>
         <Row>
           <Col span={12}>
