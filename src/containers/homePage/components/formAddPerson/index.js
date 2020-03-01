@@ -1,8 +1,17 @@
 // @flow
 import { Form, Input, Button } from 'antd'
 import * as R from 'ramda'
-import React from 'react'
+import React, { useState } from 'react'
 import styled from '@emotion/styled'
+
+const StyledContent = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+const StyledFooter = styled(StyledContent)`
+  justify-content: flex-end;
+`
 
 const StyledInputBox = styled.div`
   display: flex;
@@ -40,40 +49,63 @@ const StyledButton = styled(Button)`
 `
 
 type Props = {
-  person: Object,
-  onChange: Function,
-  onSubmit: Function
+  addPerson: Function
 }
 
 const FormAddPerson = (porps: Props) => {
-  const { person, onChange, onSubmit } = porps
+  const { addPerson } = porps
+
+  const [person, setPerson] = useState({ firstName: '', lastName: '' })
+
+  const onChange = e => {
+    setPerson({ ...person, [e.target.name]: e.target.value })
+  }
+
+  const onSubmit = e => {
+    e.preventDefault()
+    if (
+      R.isEmpty(R.path(['firstName'], person)) ||
+      R.isEmpty(R.path(['lastName'], person))
+    )
+      return
+
+    const newPerson = {
+      firstName: R.path(['firstName'], person),
+      lastName: R.path(['lastName'], person)
+    }
+    addPerson(newPerson)
+    setPerson({ firstName: '', lastName: '' })
+  }
 
   return (
-    <Form>
-      <StyledInputBox>
-        <StyledLabel>First Name</StyledLabel>
-        <StyledInput
-          name="firstName"
-          value={R.path(['firstName'], person)}
-          onChange={e => onChange(e)}
-          onPressEnter={onSubmit}
-        />
-      </StyledInputBox>
+    <StyledContent>
+      <Form>
+        <StyledInputBox>
+          <StyledLabel>First Name</StyledLabel>
+          <StyledInput
+            name="firstName"
+            value={R.path(['firstName'], person)}
+            onChange={e => onChange(e)}
+            onPressEnter={onSubmit}
+          />
+        </StyledInputBox>
 
-      <StyledInputBox>
-        <StyledLabel>Last Name</StyledLabel>
-        <StyledInput
-          name="lastName"
-          value={R.path(['lastName'], person)}
-          onChange={e => onChange(e)}
-          onPressEnter={onSubmit}
-        />
-      </StyledInputBox>
-
-      <StyledButton type="primary" onClick={e => onSubmit(e)}>
-        Submit
-      </StyledButton>
-    </Form>
+        <StyledInputBox>
+          <StyledLabel>Last Name</StyledLabel>
+          <StyledInput
+            name="lastName"
+            value={R.path(['lastName'], person)}
+            onChange={e => onChange(e)}
+            onPressEnter={onSubmit}
+          />
+        </StyledInputBox>
+        <StyledFooter>
+          <StyledButton type="primary" onClick={e => onSubmit(e)}>
+            Submit
+          </StyledButton>
+        </StyledFooter>
+      </Form>
+    </StyledContent>
   )
 }
 

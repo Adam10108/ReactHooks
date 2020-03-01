@@ -8,6 +8,11 @@ const StyledLabel = styled.span`
   font-weight: 800;
   color: black;
 `
+const StyledListBox = styled.div`
+  height: 160px;
+  overflow-y: scroll;
+`
+
 const StyledListItem = styled.div`
   font-size: 20px;
   text-transform: capitalize;
@@ -22,7 +27,7 @@ const ListPeople = (porps: Props) => {
   return (
     <>
       <StyledLabel>List Of People</StyledLabel>
-      <div>
+      <StyledListBox>
         {people.map((p, i) => {
           return (
             <StyledListItem key={Math.random() * 1000}>
@@ -30,7 +35,7 @@ const ListPeople = (porps: Props) => {
             </StyledListItem>
           )
         })}
-      </div>
+      </StyledListBox>
     </>
   )
 }
