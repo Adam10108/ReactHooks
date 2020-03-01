@@ -1,7 +1,9 @@
 // @flow
 import * as R from 'ramda'
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from '@emotion/styled'
+
+import { PeopleContext } from '../../../../core/hooks/context'
 
 const StyledLabel = styled.span`
   font-size: 20px;
@@ -18,12 +20,9 @@ const StyledListItem = styled.div`
   text-transform: capitalize;
 `
 
-type Props = {
-  people: []
-}
-
-const ListPeople = (porps: Props) => {
-  const { people } = porps
+const ListPeople = () => {
+  const peopleContext = useContext(PeopleContext)
+  const { people } = peopleContext
   return (
     <>
       <StyledLabel>List Of People</StyledLabel>

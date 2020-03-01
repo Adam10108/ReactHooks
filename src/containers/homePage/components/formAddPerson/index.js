@@ -1,8 +1,10 @@
 // @flow
 import { Form, Input, Button } from 'antd'
 import * as R from 'ramda'
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import styled from '@emotion/styled'
+
+import { PeopleContext } from '../../../../core/hooks/context'
 
 const StyledContent = styled.div`
   display: flex;
@@ -48,12 +50,8 @@ const StyledButton = styled(Button)`
   }
 `
 
-type Props = {
-  addPerson: Function
-}
-
-const FormAddPerson = (porps: Props) => {
-  const { addPerson } = porps
+const FormAddPerson = () => {
+  const peopleContext = useContext(PeopleContext)
 
   const [person, setPerson] = useState({ firstName: '', lastName: '' })
 
@@ -73,7 +71,7 @@ const FormAddPerson = (porps: Props) => {
       firstName: R.path(['firstName'], person),
       lastName: R.path(['lastName'], person)
     }
-    addPerson(newPerson)
+    peopleContext.addPerson(newPerson)
     setPerson({ firstName: '', lastName: '' })
   }
 

@@ -1,9 +1,12 @@
 // @flow
 import { Row, Col } from 'antd'
-import React, { useState } from 'react'
+import React, { useReducer } from 'react'
 import styled from '@emotion/styled'
 
 import { FormAddPerson, ListPeople, NewestPerson } from './components'
+import { PeopleContext } from '../../core/hooks/context'
+import { peopleReducer } from '../../core/hooks/reducer'
+import { ADD_PERSON } from '../../core/hooks/types'
 
 const StyledContent = styled.div`
   height: 100vh;
@@ -23,43 +26,57 @@ const StyledHeader = styled.div`
   );
 
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
 `
 
 const StyledText = styled.span`
-  font-size: ${props => (props.header ? '40px' : '30px')};
+  font-size: 40px;
   font-weight: 800;
-  color: ${props => (props.header ? 'white' : 'black')};
+  color: white;
 `
 
 const HomePage = () => {
-  const [people, setPeople] = useState([
-    { firstName: 'Jame', lastName: 'Dean' },
-    { firstName: 'Rocky', lastName: 'Babo' }
-  ])
-
-  const addPerson = newPerson => {
-    setPeople([...people, newPerson])
+  const initialState = {
+    people: [
+      { firstName: 'Jame', lastName: 'Dean' },
+      { firstName: 'Rocky', lastName: 'Babo' }
+    ]
   }
-  const lastPeople = people[people.length - 1]
+
+  const [state, dispatch] = useReducer(peopleReducer, initialState)
+
+  const addPerson = person => {
+    dispatch({
+      type: ADD_PERSON,
+      payload: person
+    })
+  }
 
   return (
-    <StyledContent>
-      <StyledHeader>
-        <StyledText header>Learn React Hooks (useState)</StyledText>
-      </StyledHeader>
-      <Row>
-        <Col span={12}>
-          <FormAddPerson addPerson={addPerson} />
-        </Col>
-        <Col span={12}>
-          <ListPeople people={people} />
-        </Col>
-      </Row>
-      <NewestPerson lastPeople={lastPeople} />
-      <Row />
-    </StyledContent>
+    <PeopleContext.Provider
+      value={{
+        people: state.people,
+        addPerson
+      }}
+    >
+      <StyledContent>
+        <StyledHeader>
+          <StyledText>Learn React Hooks</StyledText>
+          <StyledText>(useState , useEffect)</StyledText>
+        </StyledHeader>
+        <Row>
+          <Col span={12}>
+            <FormAddPerson />
+          </Col>
+          <Col span={12}>
+            <ListPeople />
+          </Col>
+        </Row>
+        <NewestPerson />
+        <Row />
+      </StyledContent>
+    </PeopleContext.Provider>
   )
 }
 export default HomePage

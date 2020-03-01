@@ -1,11 +1,13 @@
 // @flow
 import * as R from 'ramda'
-import React, { useEffect } from 'react'
+import React, { useEffect, useContext } from 'react'
 import styled from '@emotion/styled'
+
+import { PeopleContext } from '../../../../core/hooks/context'
 
 const StyledLayout = styled.div`
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
 `
 
@@ -15,12 +17,11 @@ const StyledText = styled.span`
   color: black;
 `
 
-type Props = {
-  lastPeople: Object
-}
-
-const NewestPerson = (props: Props) => {
-  const { lastPeople } = props
+const NewestPerson = () => {
+  const peopleContext = useContext(PeopleContext)
+  const { people } = peopleContext
+  const lastPeople = people[peopleContext.people.length - 1]
+  const countPeople = people.length
 
   useEffect(() => {
     const newestPersonName = `Newest Person : ${R.path(
@@ -41,6 +42,7 @@ const NewestPerson = (props: Props) => {
   return (
     <StyledLayout>
       <StyledText id="newestPerson" />
+      <StyledText>Count : {countPeople}</StyledText>
     </StyledLayout>
   )
 }
