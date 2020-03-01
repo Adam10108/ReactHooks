@@ -23,9 +23,13 @@ const NewestPerson = (props: Props) => {
   const { lastPeople } = props
 
   useEffect(() => {
-    const newestPersonName = `${R.path(['firstName'], lastPeople)}}
+    const newestPersonName = `Newest Person : ${R.path(
+      ['firstName'],
+      lastPeople
+    )}
         ${R.path(['lastName'], lastPeople)}`
     document.title = newestPersonName
+    document.getElementById('newestPerson').innerHTML = newestPersonName
     // eslint-disable-next-line no-console
     console.log('useEffect')
     return () => {
@@ -36,10 +40,7 @@ const NewestPerson = (props: Props) => {
 
   return (
     <StyledLayout>
-      <StyledText>
-        NewestPerson : {R.path(['firstName'], lastPeople)}
-        {R.path(['lastName'], lastPeople)}
-      </StyledText>
+      <StyledText id="newestPerson" />
     </StyledLayout>
   )
 }
